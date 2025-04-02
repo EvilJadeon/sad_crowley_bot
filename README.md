@@ -28,7 +28,7 @@ A Telegram bot built with Go.
 To run locally:
 
 ```bash
-go run cmd/bot/main.go
+make run
 ```
 
 ## License
