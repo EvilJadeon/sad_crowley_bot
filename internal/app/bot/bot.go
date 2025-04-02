@@ -16,6 +16,7 @@ type Bot struct {
 func New(config *Config) *Bot {
 	return &Bot{
 		config: config,
+		api:    nil,
 	}
 }
 
@@ -23,7 +24,7 @@ func New(config *Config) *Bot {
 func (b *Bot) Start() error {
 	bot, err := tgbotapi.NewBotAPI(b.config.TelegramBotToken)
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 
 	b.api = bot
