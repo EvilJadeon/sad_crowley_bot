@@ -25,7 +25,7 @@ docker-logs:
 
 # Testing and code quality
 test:
-	go test -v ./...
+	go test -v -race -timeout 30s ./...
 
 lint:
 	golangci-lint run

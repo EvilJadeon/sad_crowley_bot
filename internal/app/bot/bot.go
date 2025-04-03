@@ -3,6 +3,8 @@ package bot
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/sirupsen/logrus"
+
+	"github.com/EvilJadeon/sad_crowley_bot/internal/app/store"
 )
 
 // Bot ...
@@ -10,6 +12,7 @@ type Bot struct {
 	config *Config
 	api    *tgbotapi.BotAPI
 	logger *logrus.Logger
+	store  *store.Store
 }
 
 // New ...
@@ -21,6 +24,7 @@ func New(config *Config) *Bot {
 	}
 }
 
+// SetLogger ...
 func (b *Bot) SetLogger() error {
 	level, err := logrus.ParseLevel(b.config.LogLevel)
 
@@ -33,9 +37,26 @@ func (b *Bot) SetLogger() error {
 	return nil
 }
 
+// SetStore ...
+func (b *Bot) SetStore() error {
+	st := store.New(b.config.Store)
+
+	if err := st.Open(); err != nil {
+		return err
+	}
+
+	b.store = st
+
+	return nil
+}
+
 // Start ...
 func (b *Bot) Start() error {
 	if err := b.SetLogger(); err != nil {
+		return err
+	}
+
+	if err := b.SetStore(); err != nil {
 		return err
 	}
 
