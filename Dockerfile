@@ -15,10 +15,17 @@ FROM alpine:latest
 WORKDIR /app
 
 COPY --from=builder /crowley /app/crowley
+COPY migrations /app/migrations
 
 RUN chmod +x /app/crowley
 
-RUN apk add --no-cache ca-certificates
+# Install required packages including migrate
+RUN apk add --no-cache ca-certificates curl tar
+
+# Install migrate tool
+RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz \
+    && mv migrate /usr/local/bin/migrate \
+    && chmod +x /usr/local/bin/migrate
 
 EXPOSE 8080
 
